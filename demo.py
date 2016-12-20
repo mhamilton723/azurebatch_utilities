@@ -1,5 +1,5 @@
 import secrets
-from grid_submission import Job,Config
+from ab_utils import Job, Config, Pool
 import os
 
 config = Config(
@@ -11,9 +11,10 @@ config = Config(
     secrets.storage_key,
     "mhamilton723/conda-tensorflow",
     "fileshare",
-    4)
+    os.path.expanduser("~/batch-shipyard/config_5"))
 
-tf_job = Job("/fileshare/PycharmProjects/Adversarial_SkipGram/src/word2vec.py",
-             os.path.expanduser("~/batch-shipyard/config_4"), config)
+pool = Pool(4, "tensorflow-cpu", config)
 
-#tf_job.grid_submit({"embedding_size": [100, 200], "batch_size": [128, 256]})
+skipgram_job = Job("/fileshare/PycharmProjects/Adversarial_SkipGram/src/word2vec.py")
+
+# pool.grid_submit(skipgram_job, {"embedding_size": [50, 100, 200], "window_size": [1, 2]})
